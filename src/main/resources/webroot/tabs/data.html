@@ -1,0 +1,57 @@
+<div class="row">
+	<table class="table table-striped">
+        <thead>
+           <tr>
+               <th>Familien Nummer</th>
+               <th>Preis</th>
+           </tr>
+       </thead>
+		<tbody>
+			<tr id="inputRow">
+				<td>
+					<input type="text" class="form-control" id="fNumber" placeholder="">
+				</td>
+				<td>
+					<input type="text" class="form-control" id="price" placeholder="">
+				</td>
+			</tr>
+       </tbody>
+	</table>
+</div>
+
+<script>
+
+	var eb = new EventBus('http://localhost:8080/eventbus');
+
+	eb.onopen = function() {
+		// Nothing to do
+	}
+	
+	var submitEntry = function () {
+		var data = new Object;
+		data.familyNumber = $("#fNumber").val();
+		data.price = $("#price").val();
+		eb.send('web.client2server.add.entry', data, function(err, reply) {
+			$("<tr><td>" + reply.body.familyNumber + "</td><td>" + reply.body.price + "</td></tr>").insertAfter("#inputRow");
+		});
+		$("#fNumber").focus();
+		$("#fNumber").val("");
+		$("#price").val("");
+	}
+	
+	$('#fNumber').keypress(function (e) {
+	  	if (e.which == 13) {
+	  		$("#price").focus();
+	  		return false;
+	  	}
+	});
+	
+	$('#price').keypress(function (e) {
+		var code = e.keyCode || e.which;
+	    if (code === 9 || e.which == 13) {
+	    	submitEntry();
+	    	return false;
+	  	}
+	});
+	
+</script>

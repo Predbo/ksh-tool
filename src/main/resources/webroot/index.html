@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KSH Auswertung</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/ksh.css">
+    
+    <script src="js/jquery-1.12.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/sockjs-0.3.4.min.js"></script>
+	<script src="js/vertx-eventbus.js"></script>
+</head>
+<body>
+	<div class="container" role="main">
+		<h1>Kinder-Second-Hand Basar Auswertung</h1>
+	    
+		<div id="tabs"  class="panel with-nav-tabs panel-default">
+			<div class="panel-heading">
+			    <ul class="nav nav-tabs" id="prodTabs">
+			        <li class="active">
+			        	<a href="#tab_start" data-url="/tabs/start.html">
+			        		<span class="glyphicon glyphicon-info-sign"></span> Anleitung
+			        	</a>
+			        </li>
+			        <li>
+			        	<a href="#tab_data" data-url="/tabs/data.html">
+			        		<span class="glyphicon glyphicon-th-list"></span> Dateneingabe
+			        	</a>
+		        	</li>
+			        <li>
+			        	<a href="#tab_results" data-url="/tabs/results.html">
+			        		<span class="glyphicon glyphicon-check"></span> Zusammenfassung
+			        	</a>
+		        	</li>
+		        	<li>
+			        	<a href="#tab_print" data-url="/tabs/print.html">
+			        		<span class="glyphicon glyphicon-print"></span> Drucken
+			        	</a>
+		        	</li>
+			    </ul>
+		    </div>
+		    <div class="panel-body">
+			    <div class="tab-content">
+			        <div id="tab_start" class="tab-pane active"></div>
+			        <div id="tab_data" class="tab-pane active"></div>
+			        <div id="tab_results" class="tab-pane active"></div>
+			        <div id="tab_print" class="tab-pane active"></div>
+			    </div>
+			</div>
+		</div>
+
+	</div>
+	<script type="text/javascript">
+		$(function() {
+			$("#tab_start").load("/tabs/start.html");	
+		});
+		
+		$('#tabs').on('click','.tablink,#prodTabs a',function (e) {
+		    e.preventDefault();
+		    var url = $(this).attr("data-url");
+	
+		    if (typeof url !== "undefined") {
+		        var pane = $(this), href = this.hash;
+	
+		        // ajax load from data-url
+		        $(href).load(url,function(result){      
+		            pane.tab('show');
+		        });
+		    } else {
+		        $(this).tab('show');
+		    }
+		});
+	</script>
+</body>
+</html>

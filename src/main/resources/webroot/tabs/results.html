@@ -1,0 +1,85 @@
+<div class="row ">
+	<div class="col-md-6">
+		<table class="table table-striped">
+	        <thead>
+	            <tr>
+	                <th>Familien Nummer</th>
+	                <th>Preis</th>
+	            </tr>
+	        </thead>
+	        <tbody id="tableContent" />
+	    </table>
+	</div>
+</div>
+<script>
+
+	$(function() {
+		$.get("/kshentries", function(data) {
+			console.log(data);
+			sortResults(data, "familyNumber" , true);
+			drawTable(data);
+		});
+	});
+	
+	function sortResults(data, prop, asc) {
+		data = data.sort(function(a, b) {
+	        if (asc) return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+	        else return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+	    });
+	    return data;
+	}
+
+
+
+
+		/* 	
+		
+	var eb = new EventBus('http://localhost:8080/eventbus');
+
+	eb.onopen = function() {
+		
+		eb.send('web.client2server.get.all.entries', function(err, reply) {
+			drawTable(reply);
+		});
+		
+	eb.registerHandler("web.server2client.heartbeat", function(err, reply) {
+			$("#serverHeartbeats").append('<li class="list-group-item">' + reply.body + '</li>');
+		});
+		
+		eb.registerHandler("web.server2client.publish.test", function(err, reply) {
+			$("#publications").append(reply.body + "<br>");
+		}); 
+		
+		
+		[
+         {
+         id: 1,
+         firstName: "Peter",
+         lastName: "Jhons"},
+     {
+         id: 2,
+         firstName: "David",
+         lastName: "Bowie"}
+     ]
+	
+		
+	}
+	
+	*/
+
+	function drawTable(data) {
+	    for (var i = 0; i < data.length; i++) {
+	        drawRow(data[i]);
+	    }
+	}
+
+	function drawRow(rowData) {
+	    var row = $("<tr />")
+	    $("#tableContent").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+	    row.append($("<td>" + rowData.familyNumber + "</td>"));
+	    row.append($("<td>" + rowData.price + "</td>"));
+	}
+	
+</script>
+</body>
+</html>
