@@ -14,63 +14,49 @@
 </head>
 <body>
 	<div class="container" role="main">
-		<h1>Kinder-Second-Hand Basar Auswertung</h1>
+		<div class="page-header">
+			<h1>Auswertung für den Kinder-Second-Hand Basar</h1>
+		</div>
 	    
-		<div id="tabs"  class="panel with-nav-tabs panel-default">
-			<div class="panel-heading">
-			    <ul class="nav nav-tabs" id="prodTabs">
-			        <li class="active">
-			        	<a href="#tab_start" data-url="/tabs/start.html">
-			        		<span class="glyphicon glyphicon-info-sign"></span> Anleitung
-			        	</a>
-			        </li>
-			        <li>
-			        	<a href="#tab_data" data-url="/tabs/data.html">
-			        		<span class="glyphicon glyphicon-th-list"></span> Dateneingabe
-			        	</a>
-		        	</li>
-			        <li>
-			        	<a href="#tab_results" data-url="/tabs/results.html">
-			        		<span class="glyphicon glyphicon-check"></span> Zusammenfassung
-			        	</a>
-		        	</li>
-		        	<li>
-			        	<a href="#tab_print" data-url="/tabs/print.html">
-			        		<span class="glyphicon glyphicon-print"></span> Drucken
-			        	</a>
-		        	</li>
-			    </ul>
-		    </div>
-		    <div class="panel-body">
-			    <div class="tab-content">
-			        <div id="tab_start" class="tab-pane active"></div>
-			        <div id="tab_data" class="tab-pane active"></div>
-			        <div id="tab_results" class="tab-pane active"></div>
-			        <div id="tab_print" class="tab-pane active"></div>
-			    </div>
+		<div class="row">
+			<div class="col-md-12 bhoechie-tab-container">
+				<div class="col-md-3 bhoechie-tab-menu">
+					<div class="list-group">
+						<a href="#" data-url="/tabs/start.html" class="list-group-item text-center active">
+						  <h1 class="glyphicon glyphicon-info-sign"></h1><br/>Start
+						</a>
+						<a href="#" data-url="/tabs/data.html" class="list-group-item text-center">
+						  <h1 class="glyphicon glyphicon-th-list"></h1><br/>Daten eingeben
+						</a>
+						<a href="#" data-url="/tabs/results.html" class="list-group-item text-center">
+						  <h1 class="glyphicon glyphicon-check"></h1><br/>Daten prüfen
+						</a>
+						<a href="#" data-url="/tabs/print.html" class="list-group-item text-center">
+						  <h1 class="glyphicon glyphicon-print"></h1><br/>Drucken
+						</a>
+					</div>
+				</div>
+				<div class="col-md-9 bhoechie-tab" />
 			</div>
 		</div>
-
 	</div>
 	<script type="text/javascript">
 		$(function() {
-			$("#tab_start").load("/tabs/start.html");	
+			$(".bhoechie-tab").load("/tabs/start.html");
 		});
 		
-		$('#tabs').on('click','.tablink,#prodTabs a',function (e) {
-		    e.preventDefault();
-		    var url = $(this).attr("data-url");
-	
-		    if (typeof url !== "undefined") {
-		        var pane = $(this), href = this.hash;
-	
-		        // ajax load from data-url
-		        $(href).load(url,function(result){      
-		            pane.tab('show');
-		        });
-		    } else {
-		        $(this).tab('show');
-		    }
+		$(document).ready(function() {
+		    $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+		        e.preventDefault();
+		        $(this).siblings('a.active').removeClass("active");
+		        $(this).addClass("active");
+		        
+			    var url = $(this).attr("data-url");
+				
+			    if (typeof url !== "undefined") {
+			        $(".bhoechie-tab").load(url);
+			    }
+		    });
 		});
 	</script>
 </body>
