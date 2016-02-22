@@ -4,6 +4,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.RoutingContext;
+import de.predbo.ksh.CsvManager;
 import de.predbo.ksh.KshEntry;
 import de.predbo.ksh.KshRegistry;
 
@@ -12,20 +13,29 @@ public class KshRegistryHandler {
 	private static final Logger _logger = LoggerFactory.getLogger(KshRegistryHandler.class);
 	
 	private final KshRegistry _kshRegistry = new KshRegistry();
-
+	private final CsvManager _csvManager = new CsvManager();
+	
 	public KshRegistryHandler() {
 		
 	}
 	
 	public void getAllEntries(RoutingContext routingContext) {
-		routingContext.response()
-				.putHeader("content-type", "application/json; charset=utf-8")
-				.end(Json.encodePrettily(_kshRegistry.getEntries().values()));
+		try {
+			routingContext.response()
+						  .putHeader("content-type", "application/json; charset=utf-8")
+						  .end(Json.encodePrettily(_csvManager.getCsvContentAsList()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			routingContext.response().end();
+		}
+		
+
 	}
 
 	public void registryNewEntry(String jsonObjectAsString) {
 		KshEntry newEntry = Json.decodeValue(jsonObjectAsString, KshEntry.class);
 		//TODO validation
+		_csvManager.addEntryToCsvFile(newEntry);
 		_kshRegistry.registerEntry(newEntry);
 	}
 

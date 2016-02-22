@@ -1,12 +1,19 @@
 body {
-    font-size: 30px;
+    font-size: 26px;
 }
 
 .list-group-item {
     padding: 15px 30px;
 }
 
+.small {
+	font-size: 20px;
+}
 
+.form-control {
+	font-size: 26px;
+	height: 40px;
+}
 
 
 

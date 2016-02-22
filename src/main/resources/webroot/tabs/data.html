@@ -1,18 +1,26 @@
 <div class="row">
-	<table class="table table-striped">
+	<table class="table table-striped table-bordered">
         <thead>
            <tr>
-               <th>Familien Nummer</th>
-               <th>Preis</th>
+               <th class="small">Blatt Nummer</th>
+               <th class="small">Laufende Nummer</th>
+               <th class="small">Familien Nummer</th>
+               <th class="small">Preis</th>
            </tr>
        </thead>
 		<tbody>
 			<tr id="inputRow">
 				<td>
-					<input type="text" class="form-control" id="fNumber" placeholder="">
+					<input type="text" class="form-control" id="sNumber">
 				</td>
 				<td>
-					<input type="text" class="form-control" id="price" placeholder="">
+					<input type="text" class="form-control" id="cNumber">
+				</td>	
+				<td>
+					<input type="text" class="form-control" id="fNumber">
+				</td>
+				<td>
+					<input type="text" class="form-control" id="price">
 				</td>
 			</tr>
        </tbody>
@@ -27,14 +35,48 @@
 		// Nothing to do
 	}
 	
+	$(function() {
+		$.get("/kshentries", function(data) {
+			console.log(data);
+			sortSheetCurrent(data);
+			$("#sNumber").val(data[data.length-1].sheetNumber);
+			$("#cNumber").val(data[data.length-1].currentNumber+1);
+			drawTable(data);
+		});
+	});
+	
+
+	
+	function drawTable(data) {
+	    for (var i = 0; i < data.length; i++) {
+	        drawRow(data[i]);
+	    }
+	}
+	function drawRow(rowData) {
+	    $("<tr><td>" + rowData.sheetNumber + "</td><td>" + rowData.currentNumber + "</td><td>" + rowData.familyNumber + "</td><td>" + rowData.price + "</td></tr>").insertAfter("#inputRow")
+	}
+	
+/* 	function sortResults(data, prop, asc) {
+		data = data.sort(function(a, b) {
+	        if (asc) return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+	        else return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+	    });
+	    return data;
+	} */
+	
 	var submitEntry = function () {
 		var data = new Object;
+		data.sheetNumber = $("#sNumber").val();
+		data.currentNumber = $("#cNumber").val();
 		data.familyNumber = $("#fNumber").val();
 		data.price = $("#price").val();
 		eb.send('web.client2server.add.entry', data, function(err, reply) {
-			$("<tr><td>" + reply.body.familyNumber + "</td><td>" + reply.body.price + "</td></tr>").insertAfter("#inputRow");
+			$("<tr><td>" + reply.body.sheetNumber + "</td><td>" + reply.body.currentNumber + "</td><td>" + reply.body.familyNumber + "</td><td>" + reply.body.price + "</td></tr>").insertAfter("#inputRow");
 		});
 		$("#fNumber").focus();
+		$('#cNumber').val( function(i, oldval) {
+		    return ++oldval;
+		});
 		$("#fNumber").val("");
 		$("#price").val("");
 	}

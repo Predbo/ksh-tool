@@ -17,9 +17,8 @@ mainClassName = 'de.predbo.ksh.Log4JLauncher'
 dependencies {
 	compile "io.vertx:vertx-core:$version"
 	compile "io.vertx:vertx-web:$version"
-	compile "io.vertx:vertx-auth-jwt:$version"
-	compile "io.vertx:vertx-hazelcast:$version"
 	compile "log4j:log4j:1.2.17"
+	compile 'net.sf.supercsv:super-csv-java8:2.4.0'
 }
 
 test {

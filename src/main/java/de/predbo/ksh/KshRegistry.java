@@ -22,4 +22,5 @@ public class KshRegistry {
 		}
 		return _registry;
 	}
+	
 }
