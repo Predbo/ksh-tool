@@ -1,5 +1,7 @@
 package de.predbo.ksh;
 
+import java.io.IOException;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
@@ -9,7 +11,7 @@ import de.predbo.ksh.handler.KshRegistryHandler;
 public class MainVerticle extends AbstractVerticle {
 	
 	@Override
-	public void start() {
+	public void start() throws IOException {
 		KshRegistryHandler kshRegistryHandler = new KshRegistryHandler();
 
 		Router router = Router.router(vertx);

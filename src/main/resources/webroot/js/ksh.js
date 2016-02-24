@@ -19,3 +19,21 @@ function sortFamilyPrice(data) {
 	    );
 	});
 }
+
+function getEuroPrice(price) {
+	return euroPrice = parseFloat(price).toFixed(2).replace(".", ",") + " €";
+}
+
+$(function() {  
+	setHeight();
+    
+});
+
+$( window ).resize(function() {
+    setHeight();
+});
+
+function setHeight() {
+    $('.tab-content').height($(window).height() -150);
+    $('#offGrid').height($(window).height() -120);
+}

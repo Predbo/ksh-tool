@@ -1,21 +1,20 @@
-<div class="row ">
+
 		<table class="table table-striped table-bordered">
 	        <thead>
 	            <tr>
 	                <th class="small">Familien Nummer</th>
 	                <th class="small">Preis</th>
-	                <th class="small">Blatt Nummer</th>
-	                <th class="small">laufende Nummer</th>
+	                <th class="unimportant">Blatt Nummer</th>
+	                <th class="unimportant">laufende Nummer</th>
 	            </tr>
 	        </thead>
 	        <tbody id="tableContent" />
 	    </table>
-</div>
+
 <script>
 
 	$(function() {
 		$.get("/kshentries", function(data) {
-			console.log(data);
 			sortFamilyPrice(data);
 			drawTable(data);
 		});
@@ -31,9 +30,9 @@
 	    var row = $("<tr />")
 	    $("#tableContent").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
 	    row.append($("<td>" + rowData.familyNumber + "</td>"));
-	    row.append($("<td>" + rowData.price + "</td>"));
-	    row.append($("<td>" + rowData.sheetNumber + "</td>"));
-	    row.append($("<td>" + rowData.currentNumber + "</td>"));
+	    row.append($("<td>" + getEuroPrice(rowData.price) + "</td>"));
+	    row.append($("<td class=\"unimportant\">" + rowData.sheetNumber + "</td>"));
+	    row.append($("<td class=\"unimportant\">" + rowData.currentNumber + "</td>"));
 	}
 	
 </script>

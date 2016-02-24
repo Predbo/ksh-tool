@@ -14,51 +14,56 @@
 	<script src="js/ksh.js"></script>
 </head>
 <body>
-	<div class="container" role="main">
-		<div class="page-header">
-			<h1>Auswertung für den Kinder-Second-Hand Basar</h1>
+	<div class="container no-print" role="main">
+	    <div class="page-header">
+	        Kinder-Second-Hand Basar 
+	        <div class="btn-group pull-right">
+	        	<a class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/data.html">Daten eingeben</a>
+	        	<a class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/results.html">Zusammenfassung</a>
+	        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html">Druckvorschau</a>
+	        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html#printnow">Jetzt drucken</a>
+	        </div>
 		</div>
-	    
-		<div class="row">
-			<div class="col-md-12 bhoechie-tab-container">
-				<div class="col-md-3 bhoechie-tab-menu">
-					<div class="list-group">
-						<a href="#" data-url="/tabs/start.html" class="list-group-item text-center active">
-						  <h1 class="glyphicon glyphicon-info-sign"></h1><br/>Start
-						</a>
-						<a href="#" data-url="/tabs/data.html" class="list-group-item text-center">
-						  <h1 class="glyphicon glyphicon-th-list"></h1><br/>Daten eingeben
-						</a>
-						<a href="#" data-url="/tabs/results.html" class="list-group-item text-center">
-						  <h1 class="glyphicon glyphicon-check"></h1><br/>Daten prüfen
-						</a>
-						<a href="#" data-url="/tabs/print.html" class="list-group-item text-center">
-						  <h1 class="glyphicon glyphicon-print"></h1><br/>Drucken
-						</a>
-					</div>
-				</div>
-				<div class="col-md-9 bhoechie-tab" />
+		<div class="row tab-content-wrapper">
+			<div class="col-md-12 tab-content">
+				<div id="inGrid"/>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">
-		$(function() {
-			$(".bhoechie-tab").load("/tabs/start.html");
-		});
-		
-		$(document).ready(function() {
-		    $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
-		        e.preventDefault();
-		        $(this).siblings('a.active').removeClass("active");
-		        $(this).addClass("active");
-		        
-			    var url = $(this).attr("data-url");
-				
-			    if (typeof url !== "undefined") {
-			        $(".bhoechie-tab").load(url);
-			    }
-		    });
-		});
+	</div>
+	<div id="offGrid" />
+	
+	<script>
+	
+    $.get("/tabs/data.html", function(data) {
+        $("#inGrid").html(data);
+    });
+	
+	$('[data-toggle="navLink"]').click(function(e) {
+	    var $this = $(this),
+	        loadurl = $this.attr('data-url'),
+	        targ = $this.attr('data-target');
+
+	    if (targ.contains("offGrid")) {
+	    	$('.tab-content-wrapper').hide();
+	    	$('#offGrid').show();
+	    	
+	    } else {
+	    	$('.tab-content-wrapper').show();
+	    	$('#offGrid').hide();
+	    }
+	    
+	    if (loadurl.contains("printnow")) {
+	    	window.print();
+	    }
+	    
+	    $.get(loadurl, function(data) {
+	        $(targ).html(data);
+	    });
+
+	    return false;
+	});
+	
 	</script>
 </body>
 </html>

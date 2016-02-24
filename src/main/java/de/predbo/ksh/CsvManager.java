@@ -26,65 +26,50 @@ public class CsvManager {
 	private static final String CSV_FILENAME = "all.csv";
 	private ICsvBeanWriter _csvWriter = null;
 	private CellProcessor[] _csvCellProcessors = new CellProcessor[] {
-			new LMinMax(1L, 1000L), // _sheetNumber
-			new LMinMax(1L, 100L), // _currentNumber
-			new LMinMax(0L, 120L), // _familiyNumber
+			new LMinMax(1L, 399L), // _sheetNumber
+			new LMinMax(1L, 60L), // _currentNumber
+			new LMinMax(1L, 200L), // _familiyNumber
 			new DMinMax(0.5, 1000.0) }; // _price
 	private String[] _csvHeaders = new String[] { "sheetNumber",
 			"currentNumber", "familyNumber", "price" };
 
-	public CsvManager() {
+	public CsvManager() throws IOException {
 		try {
-			boolean newFileWasCreated = openCsvFileWriter();
+			boolean newFileWasCreated = openCsvFileWriter(true);
 			if (newFileWasCreated) {
 				_csvWriter.writeHeader(_csvHeaders);
 			}
-		} catch (Exception e) {
-			_logger.error("csv file could not be init.", e);
 		} finally {
 			closeCsvWriter();
 		}
 	}
 
-	public void addEntryToCsvFile(KshEntry kshEntry) {
+	public void addEntryToCsvFile(KshEntry kshEntry) throws IOException {
 		try {
-			openCsvFileWriter();
+			openCsvFileWriter(true);
 			_csvWriter.write(kshEntry, _csvHeaders, _csvCellProcessors);
-		} catch (Exception e) {
-			_logger.error("csv file could not be init.", e);
 		} finally {
 			closeCsvWriter();
 		}
 	}
 
-	private boolean openCsvFileWriter() {
+	private boolean openCsvFileWriter(boolean append) throws IOException {
 		FileWriter fw = null;
 		boolean newFileWasCreated = false;
-		try {
-			File file = new File(CSV_FILENAME);
-			if (file.exists()) {
-				fw = new FileWriter(file, true);// if file exists append to
-												// file.
-			} else {
-				fw = new FileWriter(file); // If file does not exist. Create it.
-				newFileWasCreated = true;
-			}
-			_csvWriter = new CsvBeanWriter(fw,
-					CsvPreference.STANDARD_PREFERENCE);
-		} catch (Exception e) {
-			_logger.error("error during csv handling", e);
-			closeCsvWriter();
+		File file = new File(CSV_FILENAME);
+		if (file.exists()) {
+			fw = new FileWriter(file, append);
+		} else {
+			fw = new FileWriter(file); // If file does not exist. Create it.
+			newFileWasCreated = true;
 		}
+		_csvWriter = new CsvBeanWriter(fw, CsvPreference.STANDARD_PREFERENCE);
 		return newFileWasCreated;
 	}
 
-	private void closeCsvWriter() {
+	private void closeCsvWriter() throws IOException {
 		if (_csvWriter != null) {
-			try {
-				_csvWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			_csvWriter.close();
 		}
 	}
 
@@ -105,6 +90,33 @@ public class CsvManager {
 			}
 		}
 		return list;
+	}
+
+	public void removeEntryFromCsvFile(String entryId) throws Exception {
+		List<KshEntry> csvContentAsList = getCsvContentAsList();
+		KshEntry entryToBeRemoved = null;
+		for (KshEntry kshEntry : csvContentAsList) {
+			String entryIdOfCurrentListEntry = kshEntry.getSheetNumber() + "-" + kshEntry.getCurrentNumber(); 
+			if (entryId.equals(entryIdOfCurrentListEntry)) {
+				entryToBeRemoved = kshEntry;
+				break;
+			}
+		}
+		if (entryToBeRemoved != null) {
+			csvContentAsList.remove(entryToBeRemoved);
+		}
+		
+		try {
+			openCsvFileWriter(false);
+			_csvWriter.writeHeader(_csvHeaders);
+			for (KshEntry kshEntry : csvContentAsList) {
+				_csvWriter.write(kshEntry, _csvHeaders, _csvCellProcessors);
+			}
+		} finally {
+			closeCsvWriter();
+		}
+		
+		
 	}
 
 }

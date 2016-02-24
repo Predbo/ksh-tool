@@ -1,6 +1,57 @@
-<div class="row">
-	<div class="col-md-12">
-		<p>Hier muss noch ein pdf mit allen Daten erstellt werden, dass dann ganz bequem für alle Familiennummern eine oder bei vielen Verkäufen auch zwei Seiten druckt! </p>
-	</div>
-	<a href="print.html">Hier geht's zum Ausdrucken</a>
-</div>
+	<div id="content"/>
+	<script>
+	
+		$(function() {
+			$.get("/kshentries", function(data) {
+				sortFamilyPrice(data);
+				drawTable(data);
+			});
+		});
+		
+		function drawTable(data) {
+			var oldFamilyNumber = data[0].familyNumber;
+			var priceSum = 0;
+			drawNewFamilyHead(data[0].familyNumber);
+		    for (var i = 1; i <= data.length; i++) {
+		    	if (data[i].familyNumber != oldFamilyNumber) {
+		    		drawOldFamilyTail(oldFamilyNumber, priceSum);
+		    		priceSum = 0;
+		    		drawNewFamilyHead(data[i].familyNumber);
+		    		oldFamilyNumber = data[i].familyNumber;
+		    	}
+		        drawRow(data[i], i);
+		        priceSum+=data[i].price;
+		    }
+		    drawOldFamilyTail(oldFamilyNumber, priceSum);
+		}
+	
+		function drawNewFamilyHead(familyNumber) {
+		    var htmlContent = "<h1 style=\"page-break-before:always\">Kinder-Second-Hand Basar</h1>" + 
+		    	"<h2>der Kolpingsfamilie Köln-Brück</h2>"+ 
+		    	"<h3>Familiennummer: " + familyNumber + "</h3>" + 
+		    	"<table class=\"table table-striped table-bordered\">" + 
+		    	"<thead>" + 
+		    	"<th class=\"small\">Nr.</th>" +
+		    	"<th class=\"small\">Verkaufsnummer</th>" + 
+		    	"<th class=\"small\">Preis</th>" + 
+				"</tr>" + 
+		    	"</thead>" + 
+		    	"<tbody id=\"tableContent-" + familyNumber + "\">" + 
+		    	"</table>"		    	
+		    $("#content").append(htmlContent);
+		}
+		
+		function drawRow(rowData, number) {
+		    var row = $("<tr>")
+		    $("#tableContent-" + rowData.familyNumber).append(row);
+		    row.append($("<td>" + number + "</td><td>" + rowData.sheetNumber + "-" + rowData.currentNumber + "</td><td>" + getEuroPrice(rowData.price) + "</td></tr>"));
+		}
+		
+		function drawOldFamilyTail(familyNumber, priceSum) {
+		    var row = $("<tr/>")
+		    $("#tableContent-" + familyNumber).append(row);
+		    row.append($("<td colspan=\"2\">Summe:</td><td>" + getEuroPrice(priceSum) + "</td>"));
+		}
+		
+	</script>
+

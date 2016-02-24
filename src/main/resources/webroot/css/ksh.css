@@ -1,5 +1,6 @@
 body {
     font-size: 26px;
+    background-color: #ccc;
 }
 
 .list-group-item {
@@ -10,82 +11,87 @@ body {
 	font-size: 20px;
 }
 
+.unimportant {
+	font-size: 18px;
+	color: #999;
+}
+
+
 .form-control {
 	font-size: 26px;
 	height: 40px;
+	text-align: right;
+}
+
+.table > tbody > tr > td {
+	text-align: right;
+}
+
+.table > tbody > tr > td.center {
+	text-align: center;
+}
+
+@media print {    
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+
+.tab-content {
+	background-color: #fff;
+	-moz-border-bottom-colors: #999;
+    -moz-border-left-colors: #999;
+    -moz-border-right-colors: #999;
+    -moz-border-top-colors: none;
+    border-color: #fff transparent;
+    border-image: none;
+    border-style: solid;
+    border-width: 4px;
+    padding: 10px 20px;
+    position: relative;
+}
+.tab-content > div {
+	max-height:100%;
+	overflow: auto;
+}
+
+#offGrid > div {
+	max-height:100%;
+	overflow: auto;
+	background-color: #fff;
 }
 
 
-
-
-/*  bhoechie tab */
-div.bhoechie-tab-container{
-  z-index: 10;
-  background-color: #ffffff;
-  padding: 0 !important;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  border:1px solid #ddd;
-  margin-top: 10px;
-  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-  box-shadow: 0 6px 12px rgba(0,0,0,.175);
-  -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-  background-clip: padding-box;
-  opacity: 0.97;
-  filter: alpha(opacity=97);
-}
-div.bhoechie-tab-menu{
-  padding-right: 0;
-  padding-left: 0;
-  padding-bottom: 0;
-}
-div.bhoechie-tab-menu div.list-group{
-  margin-bottom: 0;
-}
-div.bhoechie-tab-menu div.list-group>a{
-  margin-bottom: 0;
-}
-div.bhoechie-tab-menu div.list-group>a .glyphicon,
-div.bhoechie-tab-menu div.list-group>a .fa {
-  color: #5A55A3;
-}
-div.bhoechie-tab-menu div.list-group>a:first-child{
-  border-top-right-radius: 0;
-  -moz-border-top-right-radius: 0;
-}
-div.bhoechie-tab-menu div.list-group>a:last-child{
-  border-bottom-right-radius: 0;
-  -moz-border-bottom-right-radius: 0;
-}
-div.bhoechie-tab-menu div.list-group>a.active,
-div.bhoechie-tab-menu div.list-group>a.active .glyphicon,
-div.bhoechie-tab-menu div.list-group>a.active .fa{
-  background-color: #5A55A3;
-  background-image: #5A55A3;
-  color: #ffffff;
-}
-div.bhoechie-tab-menu div.list-group>a.active:after{
-  content: '';
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  margin-top: -13px;
-  border-left: 0;
-  border-bottom: 13px solid transparent;
-  border-top: 13px solid transparent;
-  border-left: 10px solid #5A55A3;
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: #999;
+    -moz-border-right-colors: #999;
+    -moz-border-top-colors: #999;
+    background-color: white;
+    border-color: #ddd #ddd transparent;
+    border-image: none;
+    border-style: solid;
+    border-width: 4px;
+    color: #555;
+    cursor: default;
 }
 
-div.bhoechie-tab-content{
-  background-color: #ffffff;
-  /* border: 1px solid #eeeeee; */
-  padding-left: 20px;
-  padding-top: 10px;
+.nav-tabs {
+    border-bottom: 4px solid #999;
+    background-color: #ccc;
 }
 
-div.bhoechie-tab div.bhoechie-tab-content:not(.active){
-  display: none;
+.nav-tabs > li {
+    float: left;
+    margin-bottom: -4px;
 }
+
+.nav-tabs > li > a {
+   cursor: pointer;
+   padding: 10px 50px;
+}
+
+
 
 
 
