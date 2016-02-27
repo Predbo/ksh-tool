@@ -15,57 +15,59 @@
 </head>
 <body>
 	<div class="container no-print" role="main">
-	    <div class="page-header">
-	        Kinder-Second-Hand Basar 
-	        <div class="btn-group pull-right navigate">
-	        	<a href="#data" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/data.html">Daten eingeben</a>
-	        	<a href="#results" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/results.html">Zusammenfassung</a>
-	        	<a href="#print" class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html">Druckvorschau</a>
-	        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html#printnow">Jetzt drucken</a>
-	        </div>
+		<div class="page-header">
+			<h2>Kinder-Second-Hand Basar Auswertungstool
+			<div class="btn-group pull-right">
+				<a id="printNow" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;&nbsp;jezt ausdrucken</a>
+			</div></h2>
 		</div>
-		<div class="row tab-content-wrapper">
+		<div class="row">
+	        <ul class="nav nav-tabs nav-justified">
+		  		<li role="presentation" class="active">
+		  			<a role="tab" data-toggle="tab" data-url="/tabs/data.html">
+		  				<span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;Daten eingeben
+	  				</a>
+		  		</li>
+		  		<li role="presentation">
+        			<a role="tab" data-toggle="tab" data-url="/tabs/results.html">
+        				<span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;&nbsp;Zusammenfassung
+       				</a>
+		  		</li>
+		  		<li role="presentation">
+		  			<a role="tab" data-toggle="tab" data-url="/tabs/print.html">
+		        		<span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;&nbsp;Druckvorschau
+		        	</a>
+		  		</li>
+			</ul>
 			<div class="col-md-12 tab-content">
-				<div id="inGrid"/>
-			</div>
+        
+        
+ <!--        <div class="btn-group pull-right navigate">
+        	<a href="#data" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/data.html">Daten eingeben</a>
+        	<a href="#results" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/results.html">Zusammenfassung</a>
+        	<a href="#print" class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html">Druckvorschau</a>
+        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html#printnow">Jetzt drucken</a>
+        </div> -->
+
+			<div id="tab-content"></div>
 		</div>
 	</div>
 	</div>
-	<div id="offGrid" />
 	
 	<script>
-	
 	$(function() {
-	    $.get("/tabs/data.html", function(data) {
-	        $("#inGrid").html(data);
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			e.preventDefault();
+		    $.get($(e.target).attr('data-url'), function(data) {
+		        $("#tab-content").html(data);
+		    });
+		});
+		
+	    $.get("tabs/data.html", function(data) {
+	        $("#tab-content").html(data);
 	    });
 		
-		$('[data-toggle="navLink"]').click(function(e) {
-		    var $this = $(this),
-		        loadurl = $this.attr('data-url'),
-		        targ = $this.attr('data-target');
-	
-		    if (targ.contains("offGrid")) {
-		    	$('.tab-content-wrapper').hide();
-		    	$('#offGrid').show();
-		    	
-		    } else {
-		    	$('.tab-content-wrapper').show();
-		    	$('#offGrid').hide();
-		    }
-		    
-		    if (loadurl.contains("printnow")) {
-		    	window.print();
-		    }
-		    
-		    $.get(loadurl, function(data) {
-		        $(targ).html(data);
-		    });
-	
-		    return false;
-		});
 	});
-	
 	</script>
 </body>
 </html>

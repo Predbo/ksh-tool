@@ -1,18 +1,19 @@
 body {
-    font-size: 26px;
+    font-size: 20px;
+    font-weight: bold;
     background-color: #ccc;
+}
+
+.container {
+    width: 1240px;
 }
 
 .list-group-item {
     padding: 15px 30px;
 }
 
-.small {
-	font-size: 20px;
-}
-
 .panel-title {
-	font-size: 18px;
+	font-size: 20px;
     font-weight: bold;
 }
 
@@ -20,28 +21,63 @@ body {
 	background-color: #d9edf7;
 }
 
-a.btn, a.collapsable {
-	font-size: 18px;
+.page-header {
+    border-bottom: 1px solid #eee;
+    margin: 0 0 10px;
+    padding-bottom: 9px;
+}
+.nav-tabs.nav-justified > li > a {
+    border-radius: 10px 10px 0 0;
+}
+
+.nav-tabs.nav-justified > li > a > span.glyphicon {
+	font-size: 30px;
+	top: 6px;
+}
+
+.glyphicon {
+	top: 3px;
+}
+
+.btn {
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 2px 30px;
+	font-size: 16px;
 	font-weight: bold;
 }
 
+.nav-tabs.nav-justified > li > a {
+    text-decoration: none;
+    border-radius: 10px 10px 0 0;
+    margin: 0px 10px;
+    background-color: #aaa;
+}
+
+.nav-tabs.nav-justified > li.active > a, .nav-tabs.nav-justified > li.active > a:focus, .nav-tabs.nav-justified > li.active > a:hover {
+    background-color: #fff;
+    color: #555;
+    cursor: pointer;
+}
+
+.nav-tabs.nav-justified > li > a:focus, .nav-tabs.nav-justified > li > a:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+
 .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
     padding: 2px 10px;
+    text-align: right;
 }
 
 .form-control {
-	font-size: 26px;
-	height: 40px;
+	font-size: 20px;
+	font-weight: bold;
+	height: 35px;
 	text-align: right;
 }
 
-.table > tbody > tr > td {
-	text-align: right;
-}
-
-.table > tbody > tr > td.center {
-	text-align: center;
-}
 
 @media print {    
     .no-print, .no-print * {
@@ -51,7 +87,7 @@ a.btn, a.collapsable {
 
 .tab-content {
 	background-color: #fff;
-	-moz-border-bottom-colors: #999;
+/* 	-moz-border-bottom-colors: #999;
     -moz-border-left-colors: #999;
     -moz-border-right-colors: #999;
     -moz-border-top-colors: none;
@@ -59,12 +95,13 @@ a.btn, a.collapsable {
     border-image: none;
     border-style: solid;
     border-width: 4px;
-    padding: 10px 20px;
+    padding: 10px 20px; */
     position: relative;
 }
 .tab-content > div {
 	max-height:100%;
 	overflow: auto;
+	padding-top: 15px;
 }
 
 #offGrid {
@@ -81,7 +118,7 @@ a.btn, a.collapsable {
 }
 
 
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+/* .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
 	-moz-border-bottom-colors: none;
     -moz-border-left-colors: #999;
     -moz-border-right-colors: #999;
@@ -108,7 +145,7 @@ a.btn, a.collapsable {
 .nav-tabs > li > a {
    cursor: pointer;
    padding: 10px 50px;
-}
+} */
 
 
 
