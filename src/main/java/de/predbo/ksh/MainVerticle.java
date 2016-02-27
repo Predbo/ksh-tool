@@ -12,7 +12,10 @@ public class MainVerticle extends AbstractVerticle {
 	
 	@Override
 	public void start() throws IOException {
-		KshRegistryHandler kshRegistryHandler = new KshRegistryHandler();
+		
+		KshConfig kshConfig = new KshConfig(config());
+		
+		KshRegistryHandler kshRegistryHandler = new KshRegistryHandler(kshConfig);
 
 		Router router = Router.router(vertx);
 		

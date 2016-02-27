@@ -17,10 +17,10 @@
 	<div class="container no-print" role="main">
 	    <div class="page-header">
 	        Kinder-Second-Hand Basar 
-	        <div class="btn-group pull-right">
-	        	<a class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/data.html">Daten eingeben</a>
-	        	<a class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/results.html">Zusammenfassung</a>
-	        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html">Druckvorschau</a>
+	        <div class="btn-group pull-right navigate">
+	        	<a href="#data" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/data.html">Daten eingeben</a>
+	        	<a href="#results" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/results.html">Zusammenfassung</a>
+	        	<a href="#print" class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html">Druckvorschau</a>
 	        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html#printnow">Jetzt drucken</a>
 	        </div>
 		</div>
@@ -35,33 +35,35 @@
 	
 	<script>
 	
-    $.get("/tabs/data.html", function(data) {
-        $("#inGrid").html(data);
-    });
-	
-	$('[data-toggle="navLink"]').click(function(e) {
-	    var $this = $(this),
-	        loadurl = $this.attr('data-url'),
-	        targ = $this.attr('data-target');
-
-	    if (targ.contains("offGrid")) {
-	    	$('.tab-content-wrapper').hide();
-	    	$('#offGrid').show();
-	    	
-	    } else {
-	    	$('.tab-content-wrapper').show();
-	    	$('#offGrid').hide();
-	    }
-	    
-	    if (loadurl.contains("printnow")) {
-	    	window.print();
-	    }
-	    
-	    $.get(loadurl, function(data) {
-	        $(targ).html(data);
+	$(function() {
+	    $.get("/tabs/data.html", function(data) {
+	        $("#inGrid").html(data);
 	    });
-
-	    return false;
+		
+		$('[data-toggle="navLink"]').click(function(e) {
+		    var $this = $(this),
+		        loadurl = $this.attr('data-url'),
+		        targ = $this.attr('data-target');
+	
+		    if (targ.contains("offGrid")) {
+		    	$('.tab-content-wrapper').hide();
+		    	$('#offGrid').show();
+		    	
+		    } else {
+		    	$('.tab-content-wrapper').show();
+		    	$('#offGrid').hide();
+		    }
+		    
+		    if (loadurl.contains("printnow")) {
+		    	window.print();
+		    }
+		    
+		    $.get(loadurl, function(data) {
+		        $(targ).html(data);
+		    });
+	
+		    return false;
+		});
 	});
 	
 	</script>

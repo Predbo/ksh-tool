@@ -8,6 +8,7 @@ import io.vertx.ext.web.RoutingContext;
 import java.io.IOException;
 
 import de.predbo.ksh.CsvManager;
+import de.predbo.ksh.KshConfig;
 import de.predbo.ksh.KshEntry;
 import de.predbo.ksh.KshRegistry;
 
@@ -17,9 +18,12 @@ public class KshRegistryHandler {
 	
 	private final KshRegistry _kshRegistry = new KshRegistry();
 	private final CsvManager _csvManager;
+
+	private KshConfig _kshConfig;
 	
-	public KshRegistryHandler() throws IOException {
-		_csvManager = new CsvManager();
+	public KshRegistryHandler(KshConfig kshConfig) throws IOException {
+		_kshConfig = kshConfig;
+		_csvManager = new CsvManager(_kshConfig);
 	}
 	
 	public void getAllEntries(RoutingContext routingContext) {
@@ -45,6 +49,10 @@ public class KshRegistryHandler {
 
 	public void removeEntry(String entryId) throws Exception {
 		_csvManager.removeEntryFromCsvFile(entryId);
+	}
+
+	public KshConfig getKshConfig() {
+		return _kshConfig;
 	}
 
 	

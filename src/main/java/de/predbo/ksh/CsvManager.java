@@ -21,24 +21,23 @@ import org.supercsv.prefs.CsvPreference;
 
 public class CsvManager {
 
-	private static final Logger _logger = LoggerFactory
-			.getLogger(CsvManager.class);
+	private static final Logger _logger = LoggerFactory.getLogger(CsvManager.class);
 	private static final String CSV_FILENAME = "all.csv";
 	private ICsvBeanWriter _csvWriter = null;
-	private CellProcessor[] _csvCellProcessors = new CellProcessor[] {
-			new LMinMax(1L, 399L), // _sheetNumber
-			new LMinMax(1L, 60L), // _currentNumber
-			new LMinMax(1L, 200L), // _familiyNumber
-			new DMinMax(0.5, 1000.0) }; // _price
-	private String[] _csvHeaders = new String[] { "sheetNumber",
-			"currentNumber", "familyNumber", "price" };
+	private CellProcessor[] _csvCellProcessors;
+	private String[] _csvHeaders = new String[] { "sheetNumber", "currentNumber", "familyNumber", "price" };
 
-	public CsvManager() throws IOException {
+	public CsvManager(KshConfig _kshConfig) throws IOException {
 		try {
 			boolean newFileWasCreated = openCsvFileWriter(true);
 			if (newFileWasCreated) {
 				_csvWriter.writeHeader(_csvHeaders);
 			}
+			_csvCellProcessors = new CellProcessor[] {
+					new LMinMax(1L, _kshConfig.getMaxSheetNumber()),
+					new LMinMax(1L, _kshConfig.getMaxCurrentNumber()),
+					new LMinMax(1L, _kshConfig.getMaxFamilyNumber()),
+					new DMinMax(0.5, _kshConfig.getMaxprice()) };
 		} finally {
 			closeCsvWriter();
 		}

@@ -1,8 +1,5 @@
 package de.predbo.ksh.handler;
 
-import org.supercsv.cellprocessor.constraint.DMinMax;
-import org.supercsv.cellprocessor.constraint.LMinMax;
-
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -14,6 +11,7 @@ import io.vertx.ext.web.handler.sockjs.BridgeEventType;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.PermittedOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
+import de.predbo.ksh.KshConfig;
 
 public class WebsocketHandler implements Handler<RoutingContext> {
 
@@ -49,8 +47,9 @@ public class WebsocketHandler implements Handler<RoutingContext> {
 			}
 		});
 		
-		
-		
+		eventBus.consumer("web.client2server.get.maxCurrentNumber", message -> {
+			message.reply(_kshRegistryHandler.getKshConfig().getMaxCurrentNumber());
+		});
 		
 		eventBus.consumer("web.client2server.publish.test", message -> {
 			_logger.info("message to publish: " + message.body());
@@ -59,14 +58,21 @@ public class WebsocketHandler implements Handler<RoutingContext> {
 	}
 
 	private void sendErrorResponse(Message<Object> message, Throwable t) {
-		if (t.getMessage().equals("0 does not lie between the min (1) and max (60) values (inclusive)")) {
-			message.reply("ERROR: 'Laufende Nummer' darf nicht leer sein, und muss zwischen 1 und 60 liegen!");
-		} else if(t.getMessage().equals("0 does not lie between the min (1) and max (399) values (inclusive)")){
-			message.reply("ERROR: 'Blatt Nummer' darf nicht leer sein, und muss zwischen 1 und 300 liegen!");
-		} else if (t.getMessage().equals("0 does not lie between the min (1) and max (200) values (inclusive)")){
-			message.reply("ERROR: 'Familien Nummer' darf nicht leer sein, und muss zwischen 1 und 200 liegen!");
-		} else if (t.getMessage().equals("0,000000 does not lie between the min (0,500000) and max (1000,000000) values (inclusive)")){
-			message.reply("ERROR: 'Preis' darf nicht leer sein, und muss zwischen 0,50 und 1000 Euro liegen!");
+		_logger.error(t.getMessage());
+		KshConfig kshConfig = _kshRegistryHandler.getKshConfig();
+		
+		if (t.getMessage().contains(kshConfig.getMaxSheetNumber() + "")) {
+			message.reply("ERROR: 'Blatt Nummer' muss zwischen 1 und " + kshConfig.getMaxSheetNumber() + " liegen!");
+		} else if(t.getMessage().contains(kshConfig.getMaxCurrentNumber() + "")) {
+			message.reply("ERROR: 'Laufende Nummer' muss zwischen 1 und " + kshConfig.getMaxCurrentNumber() + " liegen!");
+		} else if (t.getMessage().contains(kshConfig.getMaxFamilyNumber() + "")) {
+			message.reply("ERROR: 'Familien Nummer' muss zwischen 1 und " + kshConfig.getMaxFamilyNumber() + " liegen!");
+		} else if (t.getMessage().contains(kshConfig.getMaxprice() + "")) {
+			message.reply("ERROR: 'Preis' muss zwischen 0,50 und " + kshConfig.getMaxprice() + ",00 Euro liegen!");
+		} else if (t.getMessage().contains("Failed to decode:Can not construct instance of")){
+			message.reply("ERROR: Bitte Werte Überprüfen, nur Zahlen sind erlaubt");
+		} else {
+			message.reply("ERROR: Unerwarteter Fehler!");
 		}
 	}
 	
