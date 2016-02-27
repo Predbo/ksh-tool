@@ -39,6 +39,10 @@ body {
 	top: 3px;
 }
 
+a {
+	outline: 0;
+}
+
 .btn {
     border-radius: 8px;
     cursor: pointer;
