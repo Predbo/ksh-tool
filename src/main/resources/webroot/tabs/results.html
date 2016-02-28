@@ -14,12 +14,12 @@
 		$.get("/kshentries", function(data) {
 			if (data.length > 0) {
 				sortFamilyPrice(data);
-				drawTable(data);
+				drawResultsTable(data);
 			}
 		});
 	});
 	
-	function drawTable(data) {
+	function drawResultsTable(data) {
 		var priceSum = 0;
 		var entrySum = 0;
 		var familySum = 0;
@@ -48,7 +48,7 @@
 	    
       	$("#head-title").append("" + 
     		"<div class=\"col-md-3\"><i class=\"glyphicon glyphicon-chevron-right\"></i>&nbsp;&nbsp;&nbsp;Familien: " + familySumAll + "</div>" + 
-    	    "<div class=\"col-md-2\">Artikel: " + entrySumAll + "</div>" + 
+    	    "<div class=\"col-md-2\">Positionen: " + entrySumAll + "</div>" + 
     	   	"<div class=\"col-md-3\">Summe ges.: " + getEuroPrice(priceSumAll) + "</div>" +
     	   	"<div class=\"col-md-2\">Kolping: " + getEuroPrice(priceSumAll*0.3) + "</div>" + 
     	   	"<div class=\"col-md-2\">Kunde: " + getEuroPrice(priceSumAll*0.7) + "</div>");

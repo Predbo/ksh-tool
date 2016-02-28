@@ -39,10 +39,6 @@ body {
 	top: 3px;
 }
 
-a {
-	outline: 0;
-}
-
 .btn {
     border-radius: 8px;
     cursor: pointer;
@@ -75,6 +71,15 @@ a {
     text-align: right;
 }
 
+.table > tfoot {
+	border-top: 5px solid #555;
+	font-size: 24px;
+}
+.small {
+	font-size: 20px;
+	color: #999;
+}
+
 .form-control {
 	font-size: 20px;
 	font-weight: bold;
@@ -87,7 +92,20 @@ a {
     .no-print, .no-print * {
         display: none !important;
     }
+    
+    .container {
+    	width: 100% !important;
+    }
 }
+
+.printTableHeader {
+	page-break-before: always;
+	display: block;
+    float: right;
+    margin-right: 120px;
+    margin-bottom: 50px;
+}
+    
 
 .tab-content {
 	background-color: #fff;

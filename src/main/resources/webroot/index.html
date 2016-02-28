@@ -14,15 +14,16 @@
 	<script src="js/ksh.js"></script>
 </head>
 <body>
-	<div class="container no-print" role="main">
-		<div class="page-header">
+	<div class="container" role="main">
+		<div class="page-header no-print">
 			<h2>Kinder-Second-Hand Basar Auswertungstool
-			<div class="btn-group pull-right">
-				<a id="printNow" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;&nbsp;jezt ausdrucken</a>
-			</div></h2>
+<!-- 				<div class="btn-group pull-right">
+					<a id="printNow" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;&nbsp;jezt ausdrucken</a>
+				</div> -->
+			</h2>
 		</div>
 		<div class="row">
-	        <ul class="nav nav-tabs nav-justified">
+	        <ul class="nav nav-tabs nav-justified  no-print">
 		  		<li role="presentation" class="active">
 		  			<a role="tab" data-toggle="tab" data-url="/tabs/data.html">
 		  				<span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;Daten eingeben
@@ -40,18 +41,9 @@
 		  		</li>
 			</ul>
 			<div class="col-md-12 tab-content">
-        
-        
- <!--        <div class="btn-group pull-right navigate">
-        	<a href="#data" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/data.html">Daten eingeben</a>
-        	<a href="#results" class="btn btn-lg btn-primary" data-target="#inGrid" data-toggle="navLink" data-url="/tabs/results.html">Zusammenfassung</a>
-        	<a href="#print" class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html">Druckvorschau</a>
-        	<a class="btn btn-lg btn-primary" data-target="#offGrid" data-toggle="navLink" data-url="/tabs/print.html#printnow">Jetzt drucken</a>
-        </div> -->
-
-			<div id="tab-content"></div>
+				<div id="tab-content"></div>
+			</div>
 		</div>
-	</div>
 	</div>
 	
 	<script>

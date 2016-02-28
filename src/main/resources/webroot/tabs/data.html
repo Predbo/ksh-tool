@@ -88,7 +88,7 @@
 							$("#sNumber").val(data[data.length-1].sheetNumber);
 							$("#cNumber").val(data[data.length-1].currentNumber+1);
 						}
-						drawTable(data);
+						drawDataTable(data);
 					} else {
 						$("#sNumber").val(1);
 						$("#cNumber").val(1);
@@ -141,7 +141,7 @@
 	
 
 	
-	function drawTable(data) {
+	function drawDataTable(data) {
 		var oldSheetNumber = data[0].sheetNumber;
 		var latestSheetNumber = data[data.length-1].sheetNumber;
 		var priceSum = 0;

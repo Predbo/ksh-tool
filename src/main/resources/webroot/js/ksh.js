@@ -35,5 +35,4 @@ $( window ).resize(function() {
 
 function setHeight() {
     $('.tab-content').height($(window).height() -150);
-    //$('#offGrid').height($(window).height() -120);
 }
