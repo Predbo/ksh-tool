@@ -8,22 +8,31 @@ public class KshConfig {
 	
 	private static final Logger _logger = LoggerFactory.getLogger(KshConfig.class);
 
-	private int _maxSheetNumber = 99999;
-	private int _maxCurrentNumber = 40;
-	private int _maxFamilyNumber = 77777;
-	private int _maxPrice = 66666;
+	private int _maxSheetNumber;
+	private int _maxCurrentNumber;
+	private int _maxFamilyNumber;
+	private int _maxPrice;
 	
 	public KshConfig(JsonObject config) {
-		try {
-			_maxSheetNumber = config.getInteger("max.sheet.number");
-			_maxCurrentNumber = config.getInteger("max.current.number");
-			_maxFamilyNumber = config.getInteger("max.familiy.number");
-			_maxPrice = config.getInteger("max.pricer");
-		} catch (Exception e) {
-			_logger.info("No config file available, will use default values");
+		if (config == null) {
+			config = new JsonObject();
+			_logger.info("Keine Konfiguration übergeben, folgende Standard Werte werden verwendet:");
+		} else {
+			_logger.info("Folgende Konfiguration wurde übegeben:");
 		}
+		_maxSheetNumber = config.getInteger("max.sheet.number", 300);
+		_maxCurrentNumber = config.getInteger("max.current.number", 40);
+		_maxFamilyNumber = config.getInteger("max.familiy.number", 120);
+		_maxPrice = config.getInteger("max.price", 10000);
+		print();
 	}
 	
+	public void print()  {
+		_logger.info("Maximale Blattnummer = " + _maxSheetNumber);
+		_logger.info("Maximale laufende Nummer pro Blatt = " + _maxCurrentNumber);
+		_logger.info("Maximale Familiennummer = " + _maxFamilyNumber);
+		_logger.info("Maximaler Preis = " + _maxPrice);
+	}
 	
 	public int getMaxSheetNumber() {
 		return _maxSheetNumber;

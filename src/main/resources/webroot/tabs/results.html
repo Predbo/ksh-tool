@@ -6,40 +6,38 @@
 <div id="resultContent" class="panel-group" role="tablist" aria-multiselectable="true" />
 
 <script>
-	var priceSumAll = 0;
-	var entrySumAll = 0;
-	var familySumAll = 0;
 
 	$(function() {
-		$.get("/kshentries", function(data) {
-			if (data.length > 0) {
-				sortFamilyPrice(data);
-				drawResultsTable(data);
-			}
-		});
+		if (dataSet.length > 0) {
+			sortFamilyPrice();
+			drawResultsTable();
+		}
 	});
 	
-	function drawResultsTable(data) {
+	function drawResultsTable() {
 		var priceSum = 0;
 		var entrySum = 0;
 		var familySum = 0;
-		var oldFamilyNumber = data[0].familyNumber;
+		var priceSumAll = 0;
+		var entrySumAll = 0;
+		var familySumAll = 0;
+		var oldFamilyNumber = dataSet[0].familyNumber;
 		drawNewFamilyHead(oldFamilyNumber);
 		
-	    for (i = 0; i < data.length; i++) {
-			if (data[i].familyNumber != oldFamilyNumber) {
+	    for (i = 0; i < dataSet.length; i++) {
+			if (dataSet[i].familyNumber != oldFamilyNumber) {
 	    		writeHeadContent(oldFamilyNumber, priceSum, entrySum);
 	    		priceSumAll += priceSum;
 	    		entrySumAll += entrySum;
 	    		familySumAll++;
 	    		priceSum = 0;
 	    		entrySum = 0;
-	    		oldFamilyNumber = data[i].familyNumber;
+	    		oldFamilyNumber = dataSet[i].familyNumber;
 	    		drawNewFamilyHead(oldFamilyNumber);
 	    	}
-	        priceSum+=data[i].price;
+	        priceSum+=dataSet[i].price;
 	        entrySum++;
-	        drawRow(data[i], entrySum);
+	        drawRow(dataSet[i], entrySum);
 	    }
 		priceSumAll += priceSum;
 		entrySumAll += entrySum;

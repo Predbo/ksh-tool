@@ -71,7 +71,7 @@ body {
     text-align: right;
 }
 
-.table > tfoot {
+.table > tbody > tr.footer > td {
 	border-top: 5px solid #555;
 	font-size: 24px;
 }

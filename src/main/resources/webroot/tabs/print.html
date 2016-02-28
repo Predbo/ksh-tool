@@ -10,7 +10,6 @@
 		</tr>
      </thead>
 	<tbody id="headtable-body" />
-	<tfoot id="headtable-foot" />
 </table>
 <div id="printEntries"></div>
 
@@ -21,23 +20,21 @@
 	var familySumAll = 0;
 
 	$(function() {
-		$.get("/kshentries", function(data) {
-			if (data.length > 0) {
-				sortFamilyPrice(data);
-				drawPrintTable(data);
-			}
-		});
+		if (dataSet.length > 0) {
+			sortFamilyPrice();
+			drawPrintTable();
+		}
 	});
 	
-	function drawPrintTable(data) {
+	function drawPrintTable() {
 		var priceSum = 0;
 		var entrySum = 0;
 		var familySum = 0;
-		var oldFamilyNumber = data[0].familyNumber;
+		var oldFamilyNumber = dataSet[0].familyNumber;
 		createFamilyTable(oldFamilyNumber);
 		
-	    for (i = 0; i < data.length; i++) {
-			if (data[i].familyNumber != oldFamilyNumber) {
+	    for (i = 0; i < dataSet.length; i++) {
+			if (dataSet[i].familyNumber != oldFamilyNumber) {
 	    		addFamilyFooter(oldFamilyNumber, priceSum);
 	    		addHeadTableEntry(oldFamilyNumber, priceSum, entrySum);
 	    		priceSumAll += priceSum;
@@ -45,12 +42,12 @@
 	    		familySumAll++;
 	    		priceSum = 0;
 	    		entrySum = 0;
-	    		oldFamilyNumber = data[i].familyNumber;
+	    		oldFamilyNumber = dataSet[i].familyNumber;
 	    		createFamilyTable(oldFamilyNumber);
 	    	}
-	        priceSum+=data[i].price;
+	        priceSum+=dataSet[i].price;
 	        entrySum++;
-	        addBodyRow(data[i], entrySum);
+	        addBodyRow(dataSet[i], entrySum);
 	    }
 		priceSumAll += priceSum;
 		entrySumAll += entrySum;
@@ -58,7 +55,7 @@
 		addFamilyFooter(oldFamilyNumber, priceSum);
 		addHeadTableEntry(oldFamilyNumber, priceSum, entrySum);
 	    
-      	$("#headtable-foot").append("<tr>" + 
+      	$("#headtable-body").append("<tr class=\"footer\">" + 
     		"<td>" + familySumAll + "</td>" + 
     	    "<td>" + entrySumAll + "</td>" + 
     	   	"<td>" + getEuroPrice(priceSumAll) + "</td>" +
@@ -86,7 +83,6 @@
 	   			"</tr>" + 
 			"</thead>" + 
 			"<tbody id=\"body-" + id + "\" />" +
-			"<tfoot id=\"foot-" + id + "\" />" +
 		"</table>" + 
 		"<p>Vielen Dank für Ihr Vertrauen und die Unterstützung für einen guten Zweck. <br>Auf Wiedersehen beim nächsten Kinder-Second-Hand Basar.</p>"
 
@@ -107,13 +103,13 @@
 	
 	function addFamilyFooter(familyNumber, priceSum) {
 		var html = "" + 
-		"<tr>" + 
+		"<tr class=\"footer\">" + 
     		"<td colspan=\"2\">Summen:</td>" +
     		"<td class=\"small\">" + getEuroPrice(priceSum) + "</td>" +
     		"<td class=\"small\">" + getEuroPrice(priceSum*0.3) + "</td>" + 
    			"<td><u>" + getEuroPrice(priceSum*0.7) + "</u></td>" + 
  		"</tr>";
- 		$("#foot-" + familyNumber).append(html);
+ 		$("#body-" + familyNumber).append(html);
 	}
 	
 	function addHeadTableEntry(familyNumber, priceSum, entrySum) {

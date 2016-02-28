@@ -1,103 +1,112 @@
-		<table class="table table-striped table-bordered">
-	        <thead>
-	           <tr>
-	               <th>Blatt Nummer</th>
-	               <th>Laufende Nummer</th>
-	               <th>Familien Nummer</th>
-	               <th>Preis</th>
-	               <th style="text-align: center;">Aktion</th>
-	           </tr>
-	       </thead>
-			<tbody>
-				<tr id="inputRow">
-					<td>
-						<input type="text" class="form-control" id="sNumber">
-					</td>
-					<td>
-						<input type="text" class="form-control" id="cNumber">
-					</td>	
-					<td>
-						<input type="text" class="form-control" id="fNumber">
-					</td>
-					<td>
-						<input type="text" class="form-control" id="price">
-					</td>
-					<td style="text-align: center;">
-						<a type="button" id="addEntry" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> eintragen</a>
-					</td>
-				</tr>
-	       </tbody>
-		</table>
-		<div id="existingEntries" class="panel-group" role="tablist" aria-multiselectable="true" />
-		
-		
-		<!-- Error Modal -->
-		<div id="errorModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-lg">
-		    <div class="modal-content panel-danger">
-				<div class="modal-header panel-heading">
-		          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
-		            <span aria-hidden="true">&times;</span>
-		          </button>
-		          <p class="modal-title">Fehler in der Eingabe!</p>
-		        </div>
-		        <div class="modal-body" id="errorModalContent"></div>
-		        <div class="modal-footer">
-		          <button type="button" class="btn btn-info" data-dismiss="modal">Schließen</button>
-		        </div>
-		    </div>
-		  </div>
-		</div>
-		
-		<!-- Info Modal -->
-		<div id="infoModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-lg">
-		    <div class="modal-content panel-info">
-				<div class="modal-header panel-heading">
-		          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
-		            <span aria-hidden="true">&times;</span>
-		          </button>
-		          <p class="modal-title">Information</p>
-		        </div>
-		        <div class="modal-body" id="infoModalContent" />
-		        <div class="modal-footer">
-		          <button type="button" class="btn btn-info" data-dismiss="modal">Schließen</button>
-		        </div>
-		    </div>
-		  </div>
-		</div>
+<table class="table table-striped table-bordered">
+       <thead>
+          <tr>
+              <th>Blatt Nummer</th>
+              <th>Laufende Nummer</th>
+              <th>Familien Nummer</th>
+              <th>Preis</th>
+              <th style="text-align: center;">Aktion</th>
+          </tr>
+      </thead>
+	<tbody>
+		<tr id="inputRow">
+			<td>
+				<input type="text" class="form-control" id="sNumber">
+			</td>
+			<td>
+				<input type="text" class="form-control" id="cNumber">
+			</td>	
+			<td>
+				<input type="text" class="form-control" id="fNumber">
+			</td>
+			<td>
+				<input type="text" class="form-control" id="price">
+			</td>
+			<td style="text-align: center;">
+				<a type="button" id="addEntry" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> eintragen</a>
+			</td>
+		</tr>
+      </tbody>
+</table>
+<div id="existingEntries" class="panel-group" role="tablist" aria-multiselectable="true" />
+
+
+<!-- Error Modal -->
+<div id="errorModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content panel-danger">
+		<div class="modal-header panel-heading">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p class="modal-title">Fehler in der Eingabe!</p>
+        </div>
+        <div class="modal-body" id="errorModalContent"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Schließen</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Info Modal -->
+<div id="infoModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content panel-info">
+		<div class="modal-header panel-heading">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p class="modal-title">Information</p>
+        </div>
+        <div class="modal-body" id="infoModalContent" />
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Schließen</button>
+        </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
-	var eb = new EventBus('http://localhost:8080/eventbus');
-	var maxCurrentNumber;
-	var dataSet = {};
-
 	$(function() {
-		eb.onopen = function() {
-			eb.send('web.client2server.get.maxCurrentNumber', "", function(err, reply) {
-				maxCurrentNumber = reply.body;
+		if (dataSet.length > 0) {
+			sortSheetCurrent();
+			if (dataSet[dataSet.length-1].currentNumber >= maxCurrentNumber) {
+				$("#sNumber").val(dataSet[dataSet.length-1].sheetNumber+1);
+				$("#cNumber").val(1);
+			} else {
+				$("#sNumber").val(dataSet[dataSet.length-1].sheetNumber);
+				$("#cNumber").val(dataSet[dataSet.length-1].currentNumber+1);
+			}
+			drawDataTable(dataSet);
+		} else {
+			$("#sNumber").val(1);
+			$("#cNumber").val(1);
+		}
+		$("#fNumber").focus();
+		registerUiHandlers();
+	});
 	
-				$.get("/kshentries", function(data) {
-					if (data.length > 0) {
-						sortSheetCurrent(data);
-						if (data[data.length-1].currentNumber >= maxCurrentNumber) {
-							$("#sNumber").val(data[data.length-1].sheetNumber+1);
-							$("#cNumber").val(1);
-						} else {
-							$("#sNumber").val(data[data.length-1].sheetNumber);
-							$("#cNumber").val(data[data.length-1].currentNumber+1);
-						}
-						drawDataTable(data);
-					} else {
-						$("#sNumber").val(1);
-						$("#cNumber").val(1);
-					}
-					registerClickHandlers();
-					$("#fNumber").focus();
-				});
-			});
-		};
+
+	
+	function registerUiHandlers() {
+		$('.deleteEntry').click(function() {
+			deleteEntry($(this).attr('id').replace("a-", ""));
+		});
+		
+		$('#addEntry').click(function() {
+			submitEntry();
+	    	return false;
+		});
+		
+		$('#price').keypress(function (e) {
+			var code = e.keyCode || e.which;
+		    if (code === 9 || e.which == 13) {
+		    	submitEntry();
+		    	return false;
+		  	}
+		});
 		
 		$('#sNumber').keypress(function (e) {
 		  	if (e.which == 13) {
@@ -120,26 +129,12 @@
 		  	}
 		});
 		
-		$('#price').keypress(function (e) {
-			var code = e.keyCode || e.which;
-		    if (code === 9 || e.which == 13) {
-		    	submitEntry();
-		    	return false;
-		  	}
-		});
-		
-		
-		$('#addEntry').click(function() {
-			submitEntry();
-	    	return false;
-		});
-		
 		$('#sNumber').change(function() {
 			$('#cNumber').val(1);
 		});
-	});
+	}
 	
-
+	
 	
 	function drawDataTable(data) {
 		var oldSheetNumber = data[0].sheetNumber;
@@ -162,20 +157,15 @@
 		    		oldSheetNumber = data[i].sheetNumber;
 		    		drawNewSheetHead(oldSheetNumber);
 		    	}
-		        drawRow(data[i]);
+		        $("#content-" + data[i].sheetNumber).append(drawRow(data[i]));
 		        priceSum+=data[i].price;
 		        entrySum++;
-	    		string = data[i].sheetNumber + "-" + data[i].currentNumber;
-		   		dataSet[string] = data[i];
 		    }
 		}
 		// print latest Sheet not as collapsable
 		for (i; i < data.length; i++) {
-			drawNewEntry(data[i]);
-			string = data[i].sheetNumber + "-" + data[i].currentNumber;
-    		dataSet[string] = data[i];
+			$("#inputRow").after(drawRow(data[i]));
 	    }
-		console.log("dataSet: ", dataSet);
 	}
 	
 	
@@ -206,27 +196,15 @@
 		
 	}
 	
-	function drawNewEntry(rowData) {
-	    $("<tr id=\"" + rowData.sheetNumber + "-" + rowData.currentNumber + "\">" + 
-	        "<td>" + rowData.sheetNumber + "</td>" + 
-	        "<td>" + rowData.currentNumber + "</td>" + 
-	        "<td>" + rowData.familyNumber + "</td>" + 
-	        "<td>" + getEuroPrice(rowData.price) + "</td>" +
-	        "<td style=\"text-align: center;\"><a id=\"a-" + rowData.sheetNumber + "-" + rowData.currentNumber + "\" type=\"button\" class=\"btn btn-danger deleteEntry\"><span class=\"glyphicon glyphicon-trash\"></span>&nbsp;&nbsp;&nbsp;löschen</a></td>" + 
-	      "</tr>").insertAfter("#inputRow")
-	}
-	
-	
 	function drawRow(rowData) {
-	    var html = "" + 
-	    "<tr id=\"" + rowData.sheetNumber + "-" + rowData.currentNumber + "\">" + 
+	    return "" + 
+		"<tr id=\"" + rowData.id + "\">" + 
 	    	"<td>" + rowData.sheetNumber + "</td>" + 
 	        "<td>" + rowData.currentNumber + "</td>" + 
 	        "<td>" + rowData.familyNumber + "</td>" + 
 	        "<td>" + getEuroPrice(rowData.price) + "</td>" +
-	        "<td style=\"text-align: center;\"><a id=\"a-" + rowData.sheetNumber + "-" + rowData.currentNumber + "\" type=\"button\" class=\"btn btn-danger deleteEntry\"><span class=\"glyphicon glyphicon-trash\"></span>&nbsp;&nbsp;&nbsp;löschen</a></td>" + 
+	        "<td style=\"text-align: center;\"><a id=\"a-" + rowData.id + "\" type=\"button\" class=\"btn btn-danger deleteEntry\"><span class=\"glyphicon glyphicon-trash\"></span>&nbsp;&nbsp;&nbsp;löschen</a></td>" + 
       	"</tr>";
-      	$("#content-" + rowData.sheetNumber).append(html);
 	}
 	
 	function writeHeadContent(sheetNumber, priceSum, entrySum) {
@@ -250,85 +228,70 @@
 		});
 	}
 	
-	function registerClickHandlers() {
-		$('.deleteEntry').click(function() {
-			deleteEntry($(this).attr('id').replace("a-", ""));
-		});
-	}
-	
-	function deleteEntry(data) {
-		eb.send('web.client2server.remove.entry', data, function(err, reply) {
-			if (reply.body.toString().contains("ERROR")) {
-				$('#errorModalContent').html(reply.body.toString().replace("ERROR:", ""));
-				$('#errorModal').modal({
-					  keyboard: true,
-					  show: true,
-					  backdrop: true
-					});
-			} else {
-				$("#"+data).hide(1000);
-				delete dataSet[data];
-				console.log("dataSet is now: ", dataSet);
-			}
+	function deleteEntry(entryId) {
+		$.ajax({
+		    url: '/data/entry/' + entryId,
+		    type: 'DELETE',
+		    success: function(result) {
+				$("#"+entryId).hide(1000);
+				dataSet = $.grep(dataSet, function(e){ 
+				     return e.id != entryId; 
+				});
+		    },
+		    error: function(result) {
+				$('#errorModalContent').html(result.responseText);
+				$('#errorModal').modal({keyboard: true, show: true, backdrop: true });
+		    }
 		});
 	}
 	
 	
 	var submitEntry = function () {
-		var data = new Object;
+		var data = {};
 		data.sheetNumber = $("#sNumber").val();
 		data.currentNumber = $("#cNumber").val();
 		data.familyNumber = $("#fNumber").val();
 		data.price = $("#price").val().replace(",", ".");
-		string = data.sheetNumber + "-" + data.currentNumber;
-		if (dataSet[string]) {
+		newId = data.sheetNumber + "-" + data.currentNumber;
+		var duplicateEntry = $.grep(dataSet, function(item, index) {
+			return item.id == newId;
+		});
+		
+		if (duplicateEntry.length > 0) {
 			$('#errorModalContent').html("Es gibt schon einen Eintrag für Blatt " + data.sheetNumber + " und laufende Nummer " + data.currentNumber + "!");
-			$('#errorModal').modal({
-				  keyboard: true,
-				  show: true,
-				  backdrop: true
-			});
+			$('#errorModal').modal({keyboard: true, show: true, backdrop: true });
 			return
 		}
 
-		eb.send('web.client2server.add.entry', data, function(err, reply) {
-			if (reply.body.toString().contains("ERROR")) {
-				$('#errorModalContent').html(reply.body.toString().replace("ERROR:", ""));
-				$('#errorModal').modal({
-					  keyboard: true,
-					  show: true,
-					  backdrop: true
-					});
-			} else {
-				drawNewEntry(reply.body);
-				dataSet[string] = reply.body;
-				console.log("dataSet is now: ", dataSet);
-				$("#fNumber").focus();
-				
-				if ($('#cNumber').val() >= maxCurrentNumber) {
-					$('#cNumber').val(1);
-					$('#sNumber').val( function(i, oldval) {
-				    	return ++oldval;
-					});
-					$('#infoModalContent').html("Blatt mit der Nummer " + reply.body.sheetNumber + " ist fertig!<br> Starte mit nächsten Blatt (" + ($('#sNumber').val()) + ") und der laufenden Nummer 1!");
-					$('#infoModal').modal({
-						  keyboard: true,
-						  show: true,
-						  backdrop: true
-						});
-				} else {
-					$('#cNumber').val( function(i, oldval) {
-				    	return ++oldval;
-					});
-				}
-				$("#fNumber").val("");
-				$("#price").val("");
-				
-				$("#a-" + reply.body.sheetNumber + "-" + reply.body.currentNumber).click(function() {
-					deleteEntry($(this).attr('id').replace("a-", ""));
+		$.post("/data/entry", JSON.stringify(data), function(result) {
+			console.log(result);
+			result.id = newId;
+			$("#inputRow").after(drawRow(result));
+			dataSet.push(result);
+			console.log("dataSet is now: ", dataSet);
+			$("#fNumber").focus();
+			
+			if ($('#cNumber').val() >= maxCurrentNumber) {
+				$('#cNumber').val(1);
+				$('#sNumber').val( function(i, oldval) {
+			    	return ++oldval;
 				});
-				
+				$('#infoModalContent').html("Blatt mit der Nummer " + result.sheetNumber + " ist fertig!<br> Starte mit nächsten Blatt (" + ($('#sNumber').val()) + ") und der laufenden Nummer 1!");
+				$('#infoModal').modal({ keyboard: true, show: true, backdrop: true });
+			} else {
+				$('#cNumber').val( function(i, oldval) {
+			    	return ++oldval;
+				});
 			}
+			$("#fNumber").val("");
+			$("#price").val("");
+			
+			$("#a-" + result.id).click(function() {
+				deleteEntry($(this).attr('id').replace("a-", ""));
+			});
+		}).fail(function(result) {
+			$('#errorModalContent').html(result.responseText);
+			$('#errorModal').modal({keyboard: true, show: true, backdrop: true });
 		});
 	}
 	

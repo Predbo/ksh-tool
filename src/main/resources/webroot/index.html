@@ -24,7 +24,7 @@
 	        <ul class="nav nav-tabs nav-justified  no-print">
 		  		<li role="presentation" class="active">
 		  			<a role="tab" data-toggle="tab" data-url="/tabs/data.html">
-		  				<span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;Daten eingeben
+		  				<span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;Dateneingabe
 	  				</a>
 		  		</li>
 		  		<li role="presentation">
@@ -34,7 +34,7 @@
 		  		</li>
 		  		<li role="presentation">
 		  			<a role="tab" data-toggle="tab" data-url="/tabs/print.html">
-		        		<span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;&nbsp;Druckvorschau
+		        		<span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;&nbsp;Druckaufbereitung
 		        	</a>
 		  		</li>
 			</ul>
@@ -52,11 +52,6 @@
 		        $("#tab-content").html(data);
 		    });
 		});
-		
-	    $.get("tabs/data.html", function(data) {
-	        $("#tab-content").html(data);
-	    });
-		
 	});
 	</script>
 </body>
