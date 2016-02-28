@@ -62,15 +62,15 @@ public class WebsocketHandler implements Handler<RoutingContext> {
 		KshConfig kshConfig = _kshRegistryHandler.getKshConfig();
 		
 		if (t.getMessage().contains(kshConfig.getMaxSheetNumber() + "")) {
-			message.reply("ERROR: 'Blatt Nummer' muss zwischen 1 und " + kshConfig.getMaxSheetNumber() + " liegen!");
+			message.reply("ERROR: Blattnummer muss zwischen 1 und " + kshConfig.getMaxSheetNumber() + " liegen!");
 		} else if(t.getMessage().contains(kshConfig.getMaxCurrentNumber() + "")) {
-			message.reply("ERROR: 'Laufende Nummer' muss zwischen 1 und " + kshConfig.getMaxCurrentNumber() + " liegen!");
+			message.reply("ERROR: Laufende Nummer muss zwischen 1 und " + kshConfig.getMaxCurrentNumber() + " liegen!");
 		} else if (t.getMessage().contains(kshConfig.getMaxFamilyNumber() + "")) {
-			message.reply("ERROR: 'Familien Nummer' muss zwischen 1 und " + kshConfig.getMaxFamilyNumber() + " liegen!");
+			message.reply("ERROR: Familiennummer muss zwischen 1 und " + kshConfig.getMaxFamilyNumber() + " liegen!");
 		} else if (t.getMessage().contains(kshConfig.getMaxprice() + "")) {
-			message.reply("ERROR: 'Preis' muss zwischen 0,50 und " + kshConfig.getMaxprice() + ",00 Euro liegen!");
+			message.reply("ERROR: Preis muss zwischen 0,50 und " + kshConfig.getMaxprice() + ",00 Euro liegen!");
 		} else if (t.getMessage().contains("Failed to decode:Can not construct instance of")){
-			message.reply("ERROR: Bitte Werte Überprüfen, nur Zahlen sind erlaubt");
+			message.reply("ERROR: Bitte Werte überprüfen, nur Zahlen sind erlaubt");
 		} else {
 			message.reply("ERROR: Unerwarteter Fehler!");
 		}

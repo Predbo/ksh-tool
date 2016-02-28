@@ -9,7 +9,7 @@ public class KshConfig {
 	private static final Logger _logger = LoggerFactory.getLogger(KshConfig.class);
 
 	private int _maxSheetNumber = 99999;
-	private int _maxCurrentNumber = 20;
+	private int _maxCurrentNumber = 40;
 	private int _maxFamilyNumber = 77777;
 	private int _maxPrice = 66666;
 	

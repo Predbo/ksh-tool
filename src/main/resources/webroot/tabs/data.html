@@ -39,9 +39,9 @@
 		          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
 		            <span aria-hidden="true">&times;</span>
 		          </button>
-		          <h4 class="modal-title">Fehler in der Eingabe!</h4>
+		          <p class="modal-title">Fehler in der Eingabe!</p>
 		        </div>
-		        <div class="modal-body" id="errorModalContent" />
+		        <div class="modal-body" id="errorModalContent"></div>
 		        <div class="modal-footer">
 		          <button type="button" class="btn btn-info" data-dismiss="modal">Schließen</button>
 		        </div>
@@ -57,7 +57,7 @@
 		          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
 		            <span aria-hidden="true">&times;</span>
 		          </button>
-		          <h4 class="modal-title">Information</h4>
+		          <p class="modal-title">Information</p>
 		        </div>
 		        <div class="modal-body" id="infoModalContent" />
 		        <div class="modal-footer">
@@ -71,11 +71,11 @@
 <script>
 	var eb = new EventBus('http://localhost:8080/eventbus');
 	var maxCurrentNumber;
+	var dataSet = {};
 
 	$(function() {
 		eb.onopen = function() {
 			eb.send('web.client2server.get.maxCurrentNumber', "", function(err, reply) {
-				console.log("maxCurrentNumber=" + reply.body);
 				maxCurrentNumber = reply.body;
 	
 				$.get("/kshentries", function(data) {
@@ -165,12 +165,17 @@
 		        drawRow(data[i]);
 		        priceSum+=data[i].price;
 		        entrySum++;
+	    		string = data[i].sheetNumber + "-" + data[i].currentNumber;
+		   		dataSet[string] = data[i];
 		    }
 		}
 		// print latest Sheet not as collapsable
 		for (i; i < data.length; i++) {
 			drawNewEntry(data[i]);
+			string = data[i].sheetNumber + "-" + data[i].currentNumber;
+    		dataSet[string] = data[i];
 	    }
+		console.log("dataSet: ", dataSet);
 	}
 	
 	
@@ -225,12 +230,16 @@
 	}
 	
 	function writeHeadContent(sheetNumber, priceSum, entrySum) {
-		var missingEntySum = maxCurrentNumber - entrySum;
-		if (missingEntySum > 0) {
-			missingEntries = "</div><div class=\"col-md-2 achtung\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> " + missingEntySum + " fehlen";
+		var wrongEntrySum = maxCurrentNumber - entrySum;
+		if (wrongEntrySum > 0) {
+			wrongEntryMsg = "</div><div class=\"col-md-2 achtung\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> " + wrongEntrySum + " fehlen!";
+		} else if (wrongEntrySum < 0) {
+			wrongEntryMsg = "</div><div class=\"col-md-2 achtung\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> " + (-1*wrongEntrySum) + " zuviel!";
+		} else {
+			wrongEntryMsg = "</div><div class=\"col-md-2 achtung\">";
 		}
       	$("#title-" + sheetNumber).append("<div class=\"row\"><div class=\"col-md-3\"><i id=\"icon-" + sheetNumber + "\" class=\"glyphicon glyphicon-chevron-up\"></i>" + 
-      			"&nbsp;&nbsp;&nbsp;Blattnummer: " + sheetNumber + "</div><div class=\"col-md-3\">Anzahl der Einträge: " + entrySum + missingEntries + "</div><div class=\"col-md-4\">Summe: " + getEuroPrice(priceSum) + "</div></div>");
+      			"&nbsp;&nbsp;&nbsp;Blattnummer: " + sheetNumber + "</div><div class=\"col-md-3\">Anzahl der Einträge: " + entrySum + wrongEntryMsg + "</div><div class=\"col-md-4\">Summe: " + getEuroPrice(priceSum) + "</div></div>");
       	
 	    $("#body-" + sheetNumber).on('show.bs.collapse', function () {
 	        $("#icon-" + sheetNumber).removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
@@ -243,19 +252,24 @@
 	
 	function registerClickHandlers() {
 		$('.deleteEntry').click(function() {
-			var data = $(this).attr('id').replace("a-", "");
-			eb.send('web.client2server.remove.entry', data, function(err, reply) {
-				if (reply.body.toString().contains("ERROR")) {
-					$('#errorModalContent').html(reply.body.toString().replace("ERROR:", ""));
-					$('#errorModal').modal({
-						  keyboard: true,
-						  show: true,
-						  backdrop: true
-						});
-				} else {
-					$("#"+data).hide(1000);
-				}
-			});
+			deleteEntry($(this).attr('id').replace("a-", ""));
+		});
+	}
+	
+	function deleteEntry(data) {
+		eb.send('web.client2server.remove.entry', data, function(err, reply) {
+			if (reply.body.toString().contains("ERROR")) {
+				$('#errorModalContent').html(reply.body.toString().replace("ERROR:", ""));
+				$('#errorModal').modal({
+					  keyboard: true,
+					  show: true,
+					  backdrop: true
+					});
+			} else {
+				$("#"+data).hide(1000);
+				delete dataSet[data];
+				console.log("dataSet is now: ", dataSet);
+			}
 		});
 	}
 	
@@ -266,8 +280,18 @@
 		data.currentNumber = $("#cNumber").val();
 		data.familyNumber = $("#fNumber").val();
 		data.price = $("#price").val().replace(",", ".");
+		string = data.sheetNumber + "-" + data.currentNumber;
+		if (dataSet[string]) {
+			$('#errorModalContent').html("Es gibt schon einen Eintrag für Blatt " + data.sheetNumber + " und laufende Nummer " + data.currentNumber + "!");
+			$('#errorModal').modal({
+				  keyboard: true,
+				  show: true,
+				  backdrop: true
+			});
+			return
+		}
+
 		eb.send('web.client2server.add.entry', data, function(err, reply) {
-			console.log(reply);
 			if (reply.body.toString().contains("ERROR")) {
 				$('#errorModalContent').html(reply.body.toString().replace("ERROR:", ""));
 				$('#errorModal').modal({
@@ -277,6 +301,8 @@
 					});
 			} else {
 				drawNewEntry(reply.body);
+				dataSet[string] = reply.body;
+				console.log("dataSet is now: ", dataSet);
 				$("#fNumber").focus();
 				
 				if ($('#cNumber').val() >= maxCurrentNumber) {
@@ -299,19 +325,7 @@
 				$("#price").val("");
 				
 				$("#a-" + reply.body.sheetNumber + "-" + reply.body.currentNumber).click(function() {
-					var data = $(this).attr('id').replace("a-", "");
-					eb.send('web.client2server.remove.entry', data, function(err, reply) {
-						if (reply.body.toString().contains("ERROR")) {
-							$('#errorModalContent').html(reply.body.toString().replace("ERROR:", ""));
-							$('#errorModal').modal({
-								  keyboard: true,
-								  show: true,
-								  backdrop: true
-								});
-						} else {
-							$("#"+data).hide(1000);
-						}
-					});
+					deleteEntry($(this).attr('id').replace("a-", ""));
 				});
 				
 			}

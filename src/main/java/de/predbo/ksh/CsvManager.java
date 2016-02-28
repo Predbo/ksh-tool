@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.supercsv.cellprocessor.constraint.DMinMax;
 import org.supercsv.cellprocessor.constraint.LMinMax;
@@ -38,6 +39,22 @@ public class CsvManager {
 					new LMinMax(1L, _kshConfig.getMaxCurrentNumber()),
 					new LMinMax(1L, _kshConfig.getMaxFamilyNumber()),
 					new DMinMax(0.5, _kshConfig.getMaxprice()) };
+			
+//			KshEntry kshEntry;
+//			Random random = new Random();
+//			for (int j = 1; j <= 80; j++) {
+//				_logger.info("create entries for Blatt " + j);
+//				for (int i = 1; i <= 40; i++) {
+//					kshEntry = new KshEntry();
+//					kshEntry.setSheetNumber(j);
+//					kshEntry.setCurrentNumber(i);
+//					kshEntry.setFamilyNumber(random.nextInt(120) + 1);
+//					kshEntry.setPrice(random.nextInt(20) + 1);
+//					_csvWriter.write(kshEntry, _csvHeaders, _csvCellProcessors);
+//				}
+//			}
+			
+			
 		} finally {
 			closeCsvWriter();
 		}
